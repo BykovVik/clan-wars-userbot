@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 class UserCreate(BaseModel):
     name: str
@@ -6,7 +7,20 @@ class UserCreate(BaseModel):
     score: int
     penalties: int
     rating: int
+    clan_id: Optional[int]
 
 class UserRetrieve(BaseModel):
     name: str
     user_id: int
+    clan_id: Optional[int]
+
+class ClanCreate(BaseModel):
+    title: str
+    chat_id: int
+    wins: int
+    losses: int
+    rating: int
+
+class ClanRetrieve(BaseModel):
+    title: str
+    chat_id: int
