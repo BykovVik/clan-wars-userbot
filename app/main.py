@@ -7,7 +7,7 @@ from .config import userbot, origins
 from .database import create_all_tables, SessionLocal
 from .shemas import UserCreate, UserRetrieve, ClanCreate, ClanRetrieve
 from .models import User, Clan
-from .crud import get_user_by_id, get_all_clans
+from .crud import get_user_by_id, get_all_clans, get_all_users
 from typing import List
 
 # before start up
@@ -96,6 +96,14 @@ async def get_clans(db: Session = Depends(get_db_session)):
     if clans:
         return clans
     return JSONResponse("Clans not found", status_code=404)
+
+# Get All Users
+@app.get("/users-list/", response_model=List[UserRetrieve])
+async def get_clans(db: Session = Depends(get_db_session)):
+    users = get_all_users(db)
+    if users:
+        return users
+    return JSONResponse("Users not found", status_code=404)
 
 # Add Database connect   
 def db_connect():

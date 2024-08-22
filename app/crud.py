@@ -6,3 +6,6 @@ def get_user_by_id(db: Session, user_id: int):
 
 def get_all_clans(db: Session):
     return db.query(Clan).all()
+
+def get_all_users(db: Session):
+    return db.query(User).all()
