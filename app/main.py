@@ -7,7 +7,8 @@ from .config import userbot, origins
 from .database import create_all_tables, SessionLocal
 from .shemas import UserCreate, UserRetrieve, ClanCreate, ClanRetrieve
 from .models import User, Clan
-from .crud import get_user_by_id
+from .crud import get_user_by_id, get_all_clans
+from typing import List
 
 # before start up
 @asynccontextmanager
@@ -88,6 +89,13 @@ async def create_clan(data: ClanCreate, db: Session = Depends(get_db_session)):
     db.refresh(db_clan)
     return db_clan
 
+# Get All Clans
+@app.get("/clans-list/", response_model=List[ClanRetrieve])
+async def get_clans(db: Session = Depends(get_db_session)):
+    clans = get_all_clans(db)
+    if clans:
+        return clans
+    return JSONResponse("Clans not found", status_code=404)
 
 # Add Database connect   
 def db_connect():
