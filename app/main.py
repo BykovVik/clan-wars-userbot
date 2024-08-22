@@ -90,7 +90,7 @@ async def create_clan(data: ClanCreate, db: Session = Depends(get_db_session)):
     return db_clan
 
 # Get All Clans
-@app.get("/clans-list/", response_model=List[ClanRetrieve])
+@app.get("/clans-list/", response_model=List[ClanCreate])
 async def get_clans(db: Session = Depends(get_db_session)):
     clans = get_all_clans(db)
     if clans:
@@ -98,7 +98,7 @@ async def get_clans(db: Session = Depends(get_db_session)):
     return JSONResponse("Clans not found", status_code=404)
 
 # Get All Users
-@app.get("/users-list/", response_model=List[UserRetrieve])
+@app.get("/users-list/", response_model=List[UserCreate])
 async def get_clans(db: Session = Depends(get_db_session)):
     users = get_all_users(db)
     if users:
