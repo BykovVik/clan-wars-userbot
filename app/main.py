@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from contextlib import asynccontextmanager
 from .config import userbot, origins
 from .database import create_all_tables, SessionLocal
-from .shemas import UserCreate, UserRetrieve, ClanCreate, ClanRetrieve
+from .shemas import UserCreate, UserRetrieve, ClanCreate, ClanRetrieve, UserClanUpdate, ClanResponce
 from .models import User, Clan
 from .crud import get_user_by_id, get_all_clans, get_all_users
 from typing import List
@@ -74,6 +74,19 @@ async def get_user(user_id: int, db: Session = Depends(get_db_session)):
         return db_user
     return JSONResponse("User not found", status_code=404)
 
+# Update User Clan
+@app.patch("/user/{user_id}", response_description=UserClanUpdate)
+async def update_user_clan(user_id: int, user_update:UserClanUpdate, db: Session = Depends(get_db_session)):
+    user = db.query(User).filter(User.user_id == user_id).first()
+    if not user:
+        return JSONResponse("User not found", status_code=404)
+
+    user.clan_id = user_update.clan_id
+    db.commit()
+    db.refresh(user)
+    
+    return user_update
+
 # Create Clan
 @app.post("/clans/", response_model=ClanRetrieve)
 async def create_clan(data: ClanCreate, db: Session = Depends(get_db_session)):
@@ -90,7 +103,7 @@ async def create_clan(data: ClanCreate, db: Session = Depends(get_db_session)):
     return db_clan
 
 # Get All Clans
-@app.get("/clans-list/", response_model=List[ClanCreate])
+@app.get("/clans-list/", response_model=List[ClanResponce])
 async def get_clans(db: Session = Depends(get_db_session)):
     clans = get_all_clans(db)
     if clans:
