@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, BigInteger
+from sqlalchemy import Column, Integer, String, ForeignKey, BigInteger,Boolean
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -14,7 +14,7 @@ class User(Base):
     user_id = Column(BigInteger)
     score = Column(Integer)
     penalties = Column(Integer)
-    rating = Column(Integer)
+    is_capitan = Column(Boolean)
     clan_id = Column(Integer, ForeignKey("clans.id"), nullable=True)
     clan = relationship("Clan", back_populates="users")
 
@@ -31,4 +31,3 @@ class Clan(Base):
     users = relationship("User", back_populates="clan")
     wins = Column(Integer)
     losses = Column(Integer)
-    rating = Column(Integer)

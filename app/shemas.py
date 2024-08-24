@@ -6,12 +6,13 @@ class UserCreate(BaseModel):
     user_id: int
     score: int
     penalties: int
-    rating: int
+    is_capitan: bool
     clan_id: Optional[int]
 
 class UserRetrieve(BaseModel):
     name: str
     user_id: int
+    is_capitan: bool
     clan_id: Optional[int]
 
 class UserClanUpdate(BaseModel):
@@ -22,7 +23,6 @@ class ClanCreate(BaseModel):
     chat_id: int
     wins: int
     losses: int
-    rating: int
 
 class ClanResponce(BaseModel):
     id: int
@@ -30,7 +30,6 @@ class ClanResponce(BaseModel):
     chat_id: int
     wins: int
     losses: int
-    rating: int
 
 class ClanRetrieve(BaseModel):
     title: str
