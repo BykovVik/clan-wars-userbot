@@ -59,7 +59,7 @@ async def create_user(data: UserCreate, db: Session = Depends(get_db_session)):
         user_id=data.user_id,
         score=data.score,
         penalties=data.penalties,
-        rating=data.rating,
+        is_capitan=data.is_capitan,
         clan_id=data.clan_id)
     db.add(db_user)
     db.commit()
