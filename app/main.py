@@ -94,8 +94,7 @@ async def create_clan(data: ClanCreate, db: Session = Depends(get_db_session)):
         title=data.title,
         chat_id=data.chat_id,
         wins=data.wins,
-        losses=data.losses,
-        rating=data.rating
+        losses=data.losses
     )
     db.add(db_clan)
     db.commit()
