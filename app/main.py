@@ -7,8 +7,9 @@ from .config import userbot, origins
 from .database import create_all_tables, SessionLocal
 from .shemas import UserCreate, UserRetrieve, ClanCreate, ClanRetrieve, UserClanUpdate, ClanResponce
 from .models import User, Clan
-from .crud import get_user_by_id, get_all_clans, get_all_users
+from .crud import get_user_by_user_id, get_all_clans, get_all_users, get_clan_by_id
 from typing import List
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 # before start up
 @asynccontextmanager
@@ -69,7 +70,7 @@ async def create_user(data: UserCreate, db: Session = Depends(get_db_session)):
 # Get User
 @app.get("/user/{user_id}", response_model=UserRetrieve)
 async def get_user(user_id: int, db: Session = Depends(get_db_session)):
-    db_user = get_user_by_id(db, user_id)
+    db_user = get_user_by_user_id(db, user_id)
     if db_user:
         return db_user
     return JSONResponse("User not found", status_code=404)
