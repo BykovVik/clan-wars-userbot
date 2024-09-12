@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from contextlib import asynccontextmanager
 from .config import userbot, origins
 from .database import create_all_tables, SessionLocal
-from .shemas import UserCreate, UserRetrieve, ClanCreate, ClanRetrieve, UserClanUpdate, ClanResponce
+from .shemas import UserCreate, UserRetrieve, ClanCreate, ClanRetrieve, UserClanUpdate
 from .models import User, Clan
 from .crud import get_user_by_user_id, get_all_clans, get_all_users, get_clan_by_id
 from typing import List
@@ -53,7 +53,7 @@ async def get_reactions(chat_id: int, message_id: int):
         return {'reactions_count': 0}
     
 # User Registration
-@app.post("/users/", response_model=UserRetrieve)
+@app.post("/user/", response_model=UserRetrieve)
 async def create_user(data: UserCreate, db: Session = Depends(get_db_session)):
     db_user = User(
         name=data.name,
@@ -88,8 +88,16 @@ async def update_user_clan(user_id: int, user_update:UserClanUpdate, db: Session
     
     return user_update
 
+# Get All Users
+@app.get("/users-list/", response_model=List[UserRetrieve])
+async def get_clans(db: Session = Depends(get_db_session)):
+    users = get_all_users(db)
+    if users:
+        return users
+    return JSONResponse("Users not found", status_code=404)
+
 # Create Clan
-@app.post("/clans/", response_model=ClanRetrieve)
+@app.post("/clan/", response_model=ClanRetrieve)
 async def create_clan(data: ClanCreate, db: Session = Depends(get_db_session)):
     db_clan = Clan(
         title=data.title,
@@ -103,20 +111,12 @@ async def create_clan(data: ClanCreate, db: Session = Depends(get_db_session)):
     return db_clan
 
 # Get All Clans
-@app.get("/clans-list/", response_model=List[ClanResponce])
+@app.get("/clans-list/", response_model=List[ClanRetrieve])
 async def get_clans(db: Session = Depends(get_db_session)):
     clans = get_all_clans(db)
     if clans:
         return clans
     return JSONResponse("Clans not found", status_code=404)
-
-# Get All Users
-@app.get("/users-list/", response_model=List[UserCreate])
-async def get_clans(db: Session = Depends(get_db_session)):
-    users = get_all_users(db)
-    if users:
-        return users
-    return JSONResponse("Users not found", status_code=404)
 
 # Add Database connect   
 def db_connect():
